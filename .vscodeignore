@@ -1,0 +1,9 @@
+.github/**
+.vscode/**
+fixtures/**
+packages/**/src/**
+packages/**/test/**
+**/*.map
+**/*.ts
+coverage/**
+node_modules/.cache/**
