@@ -1,0 +1,347 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`demo fixture golden report > keeps the VPC blast-radius report reviewable 1`] = `
+{
+  "affectedResources": [
+    {
+      "address": "google_compute_firewall.internal",
+      "categories": [
+        "network-access",
+      ],
+      "confidence": "confirmed",
+      "depth": 1,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_compute_firewall.internal",
+        ],
+        [
+          "google_compute_network.main",
+          "local.network_id",
+          "google_compute_subnetwork.gke",
+          "google_compute_firewall.internal",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network_id",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "source_ranges",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "network-access",
+          "confidence": "confirmed",
+          "message": "Firewall policy attachment and network traffic may be affected.",
+          "ruleId": "vpc-firewall",
+          "severity": "medium",
+        },
+      ],
+      "severity": "medium",
+    },
+    {
+      "address": "google_compute_global_address.private_services",
+      "categories": [
+        "addressing",
+      ],
+      "confidence": "confirmed",
+      "depth": 1,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_compute_global_address.private_services",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "addressing",
+          "confidence": "confirmed",
+          "message": "The reserved private service address may be affected.",
+          "ruleId": "vpc-private-address",
+          "severity": "high",
+        },
+      ],
+      "severity": "high",
+    },
+    {
+      "address": "google_container_cluster.production",
+      "categories": [
+        "gke-networking",
+      ],
+      "confidence": "confirmed",
+      "depth": 1,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_container_cluster.production",
+        ],
+        [
+          "google_compute_network.main",
+          "google_compute_firewall.internal",
+          "google_container_cluster.production",
+        ],
+        [
+          "google_compute_network.main",
+          "local.network_id",
+          "google_compute_subnetwork.gke",
+          "google_container_cluster.production",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network",
+          "file": "<fixture>/gke.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "shared-network",
+          "file": "<fixture>/gke.tf",
+          "kind": "semantic",
+          "message": "Resources appear to share the same network configuration.",
+        },
+        {
+          "attribute": "network_id",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "location",
+          "file": "<fixture>/gke.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "gke-networking",
+          "confidence": "confirmed",
+          "message": "The GKE cluster control and data plane networking may be affected.",
+          "ruleId": "vpc-gke",
+          "severity": "high",
+        },
+      ],
+      "severity": "high",
+    },
+    {
+      "address": "google_service_networking_connection.private_services",
+      "categories": [
+        "service-networking",
+      ],
+      "confidence": "confirmed",
+      "depth": 1,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_service_networking_connection.private_services",
+        ],
+        [
+          "google_compute_network.main",
+          "google_compute_global_address.private_services",
+          "google_service_networking_connection.private_services",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "reserved_peering_ranges",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "service-networking",
+          "confidence": "confirmed",
+          "message": "Private service networking connectivity may be affected.",
+          "ruleId": "vpc-service-networking",
+          "severity": "high",
+        },
+      ],
+      "severity": "high",
+    },
+    {
+      "address": "google_sql_database_instance.primary",
+      "categories": [
+        "database-connectivity",
+      ],
+      "confidence": "confirmed",
+      "depth": 1,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_sql_database_instance.primary",
+        ],
+        [
+          "google_compute_network.main",
+          "google_service_networking_connection.private_services",
+          "google_sql_database_instance.primary",
+        ],
+        [
+          "google_compute_network.main",
+          "local.network_id",
+          "google_compute_subnetwork.gke",
+          "google_sql_database_instance.primary",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "settings.ip_configuration.private_network",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "depends_on",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "depends_on",
+        },
+        {
+          "attribute": "network_id",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "region",
+          "file": "<fixture>/cloud-sql.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "database-connectivity",
+          "confidence": "confirmed",
+          "message": "Private database connectivity may be affected.",
+          "ruleId": "vpc-sql",
+          "severity": "high",
+        },
+      ],
+      "severity": "high",
+    },
+    {
+      "address": "google_compute_subnetwork.gke",
+      "categories": [
+        "network-topology",
+      ],
+      "confidence": "transitive",
+      "depth": 2,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "local.network_id",
+          "google_compute_subnetwork.gke",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network_id",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "network",
+          "file": "<fixture>/network.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [
+        {
+          "category": "network-topology",
+          "confidence": "confirmed",
+          "message": "Subnet configuration may be affected by the VPC change.",
+          "ruleId": "vpc-subnet",
+          "severity": "high",
+        },
+      ],
+      "severity": "high",
+    },
+    {
+      "address": "google_container_node_pool.primary",
+      "categories": [],
+      "confidence": "transitive",
+      "depth": 2,
+      "paths": [
+        [
+          "google_compute_network.main",
+          "google_container_cluster.production",
+          "google_container_node_pool.primary",
+        ],
+      ],
+      "reasons": [
+        {
+          "attribute": "network",
+          "file": "<fixture>/gke.tf",
+          "kind": "expression",
+        },
+        {
+          "attribute": "location",
+          "file": "<fixture>/gke.tf",
+          "kind": "expression",
+        },
+      ],
+      "ruleMatches": [],
+      "severity": "low",
+    },
+  ],
+  "changedResource": {
+    "address": "google_compute_network.main",
+    "changeType": "configuration-modified",
+  },
+  "cycles": [],
+  "diagnostics": [],
+  "limitations": [
+    "No Terraform state was analyzed.",
+    "No Terraform plan was analyzed.",
+    "Live GCP resources were not queried.",
+  ],
+}
+`;
