@@ -1,0 +1,101 @@
+{
+  "name": "terraform-blast-radius-vscode-extension",
+  "displayName": "Terraform Blast Radius",
+  "description": "Explore the potential code-level impact of local Terraform changes.",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "terraform-blast-radius",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["Other", "Linters"],
+  "keywords": ["terraform", "gcp", "dependency", "static analysis"],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:terraform",
+    "onView:terraformBlastRadius.results",
+    "onCommand:terraformBlastRadius.analyzeCurrentResource",
+    "onCommand:terraformBlastRadius.analyzeChangedResources",
+    "onCommand:terraformBlastRadius.analyzeWorkspace"
+  ],
+  "files": ["dist", "package.json", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "watch": "node ./scripts/build.mjs --watch",
+    "check": "tsc --noEmit",
+    "test": "vitest run test",
+    "package": "npm run build && vsce package --no-dependencies --allow-missing-repository",
+    "vscode:prepublish": "npm run build"
+  },
+  "dependencies": {
+    "@terraform-blast-radius/analyzer": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.0"
+  },
+  "contributes": {
+    "commands": [
+      { "command": "terraformBlastRadius.analyzeCurrentResource", "title": "Analyze Current Resource", "category": "Terraform Blast Radius", "icon": "$(references)" },
+      { "command": "terraformBlastRadius.analyzeChangedResources", "title": "Analyze Changed Resources", "category": "Terraform Blast Radius" },
+      { "command": "terraformBlastRadius.analyzeWorkspace", "title": "Analyze Entire Workspace", "category": "Terraform Blast Radius" },
+      { "command": "terraformBlastRadius.refresh", "title": "Refresh", "category": "Terraform Blast Radius", "icon": "$(refresh)" },
+      { "command": "terraformBlastRadius.exportReport", "title": "Export Report", "category": "Terraform Blast Radius", "icon": "$(export)" },
+      { "command": "terraformBlastRadius.openResource", "title": "Open Terraform Resource", "category": "Terraform Blast Radius" },
+      { "command": "terraformBlastRadius.showResource", "title": "Show Potential Blast Radius", "category": "Terraform Blast Radius" }
+    ],
+    "views": {
+      "explorer": [
+        { "id": "terraformBlastRadius.results", "name": "Terraform Blast Radius", "when": "workspaceFolderCount != 0" }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        { "command": "terraformBlastRadius.refresh", "when": "view == terraformBlastRadius.results", "group": "navigation@1" },
+        { "command": "terraformBlastRadius.exportReport", "when": "view == terraformBlastRadius.results", "group": "navigation@2" }
+      ],
+      "editor/title/run": [
+        { "command": "terraformBlastRadius.analyzeCurrentResource", "when": "editorLangId == terraform", "group": "navigation" }
+      ]
+    },
+    "configuration": {
+      "title": "Terraform Blast Radius",
+      "properties": {
+        "terraformBlastRadius.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable local Terraform static analysis."
+        },
+        "terraformBlastRadius.debounceMilliseconds": {
+          "type": "number",
+          "default": 350,
+          "minimum": 100,
+          "maximum": 2000,
+          "description": "Delay before reanalyzing an edited Terraform file."
+        },
+        "terraformBlastRadius.maxDepth": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Maximum dependency depth included in an analysis."
+        },
+        "terraformBlastRadius.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Refresh analysis when local Terraform files change."
+        },
+        "terraformBlastRadius.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show potential blast radius counts above Terraform resources."
+        }
+      }
+    },
+    "languages": [
+      { "id": "terraform", "extensions": [".tf"], "aliases": ["Terraform", "terraform"] }
+    ]
+  }
+}
