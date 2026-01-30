@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Terraform Blast Radius",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-extension",
+        "${workspaceFolder}/fixtures/demo"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/packages/vscode-extension/dist/**/*.js"
+      ],
+      "preLaunchTask": "build"
+    }
+  ]
+}
